@@ -1,0 +1,24 @@
+<template>
+    <div id="app">
+        <el-row>
+            <el-menu class="el-menu-demo" mode="horizontal" :router="true">
+                <el-menu-item index="/">home</el-menu-item>
+                <el-menu-item index="/config">config</el-menu-item>
+                <el-menu-item index="/demo">demo</el-menu-item>
+            </el-menu>
+        </el-row>
+        <el-row>
+            <router-view></router-view>
+        </el-row>
+    </div>
+</template>
+
+<script>
+  export default {
+    name: 'blhx-dbm'
+  }
+</script>
+
+<style>
+    /* CSS */
+</style>

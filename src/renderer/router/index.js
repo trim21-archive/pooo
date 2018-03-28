@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import generated from '@/components/LandingPage'
 import config from '@/components/config'
 import demo from '@/components/demo'
+import DamageStatics from '@/components/damage-statics'
 
 Vue.use(Router)
 
@@ -22,6 +23,10 @@ export default new Router({
     {
       path: '/config',
       component: config
+    },
+    {
+      path: '/dmg',
+      component: DamageStatics
     }, {
       path: '*',
       redirect: '/'

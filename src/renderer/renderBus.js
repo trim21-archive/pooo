@@ -1,30 +1,40 @@
 import AnyproxyWsUtil from './wsc'
-
 import Vue from 'vue'
 
 let wsMsgs = []
 
-const renderBus = new Vue({})
+const renderBus = new Vue({
+  data () {
+    return {
+      proxyStatus: false
+    }
+  }
+})
 
 function checkIfWebsocketConnect (msg) {
   return msg.resHeader.hasOwnProperty('connection') && msg.resHeader.connection === 'Upgrade' &&
     msg.resHeader.hasOwnProperty('upgrade') && msg.resHeader.upgrade === 'websocket'
 }
 
-function checkIfAttack (msg) {
-//  `http://game.granbluefantasy.jp/rest/raid/normal_attack_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
-  return msg.path.startsWith('/rest/raid/normal_attack_result.json')
-}
-
-function checkIfSkill (msg) {
-// `http://game.granbluefantasy.jp/rest/raid/ability_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
-  return msg.path.startsWith('/rest/raid/ability_result.json')
-}
+// function checkIfAttack (msg) {
+//   //  `http://game.granbluefantasy.jp/rest/raid/normal_attack_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
+//   return msg.path.startsWith('/rest/raid/normal_attack_result.json')
+// }
+//
+// function checkIfSkill (msg) {
+//   // `http://game.granbluefantasy.jp/rest/raid/ability_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
+//   return msg.path.startsWith('/rest/raid/ability_result.json')
+// }
+//
+// function checkJoinRaid (msg) {
+//   // `http://game.granbluefantasy.jp/rest/multiraid/start.json?_=${timestamp}&t=${unknown}&uid=${user id}`
+//   return msg.path.startsWith('/rest/multiraid/start.json')
+// }
 
 const options = {
   baseUrl: 'ws://localhost:8002/do-not-proxy',
   onOpen: function () {
-    console.log('connection stablished')
+    console.log('connection established')
   },
   onUpdateLatestWsMsg (record) {
     let message = record.message.message
@@ -47,8 +57,9 @@ const options = {
           wsMsgs.push(msg)
           console.log('new ws connection')
         }
-        if (checkIfAttack(msg)) renderBus.$emit('attack')
-        if (checkIfSkill(msg)) renderBus.$emit('skill')
+        // if (checkIfAttack(msg)) renderBus.$emit('attack', msg)
+        // if (checkIfSkill(msg)) renderBus.$emit('skill', msg)
+        // if (checkJoinRaid(msg)) renderBus.$emit('join-battle', JSON.parse(msg.resBody))
       }
     }
   },

@@ -22,7 +22,7 @@ const config = {
   proxyHttps: false,
 
   // 是否使用前置代理
-  frontAgent: false,
+  frontAgent: true,
   frontAgentHost: '127.0.0.1',
   frontAgentPort: 8123
 }

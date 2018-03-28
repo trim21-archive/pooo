@@ -5,6 +5,7 @@
                 <el-menu-item index="/">home</el-menu-item>
                 <el-menu-item index="/config">config</el-menu-item>
                 <el-menu-item index="/demo">demo</el-menu-item>
+                <el-menu-item index="/dmg">伤害统计</el-menu-item>
             </el-menu>
         </el-row>
         <el-row>
@@ -15,7 +16,7 @@
 
 <script>
   export default {
-    name: 'blhx-dbm'
+    name: 'pooo'
   }
 </script>
 

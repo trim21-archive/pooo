@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 
 import CONFIG from '../config'
 
-import bus from '../bus'
+import bus from './bus'
 
 import proxy from './proxy/index'
 /**
@@ -26,7 +26,9 @@ ipcMain.on('update-config', (event, data) => {
 ipcMain.on('start-proxy', (event, data) => {
   if (proxyStatus === 'stop') {
     mainWindow.webContents.send('config-data', CONFIG)
-    proxy.start()
+    if (!proxy.webServerInstance) {
+      proxy.start()
+    }
     proxyStatus = 'starting'
     event.returnValue = proxyStatus
   } else {
@@ -43,14 +45,8 @@ bus.$on('proxy-ready', () => {
   mainWindow.webContents.send('proxy-ready')
 })
 
-bus.$on('skill', (data) => {
-  // console.log(data)
-  mainWindow.webContents.send('render-skill', data)
-})
-
-bus.$on('attack', (data) => {
-  // console.log(data)
-  mainWindow.webContents.send('render-attack', data)
+bus.$on('http', data => {
+  mainWindow.webContents.send('http', data)
 })
 
 const winURL = process.env.NODE_ENV === 'development'

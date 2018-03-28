@@ -1,5 +1,5 @@
 {
-  "name": "blhx-damage-statistics",
+  "name": "pooo",
   "version": "0.0.0",
   "author": "Trim21 <trim21me@gmail.com>",
   "description": "An electron-vue project",
@@ -49,6 +49,15 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
       "icon": "build/icons/icon.ico"
     },
     "linux": {
@@ -57,18 +66,18 @@
   },
   "dependencies": {
     "anyproxy": "^4.0.6",
-    "axios": "0.x.x",
     "bootstrap": "^4.0.0",
     "element-ui": "^2.2.2",
+    "standard": "^11.0.1",
     "urijs": "^1.19.1",
     "vue": "^2.3.3",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
-    "vuex": "^2.3.1",
-    "websocket": "^1.0.25"
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -83,15 +92,14 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^1.7.5",
+    "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
-    "electron-builder": "^19.19.1",
-    "babel-eslint": "^7.2.3",
     "eslint": "^4.4.1",
+    "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^3.1.1",
-    "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",

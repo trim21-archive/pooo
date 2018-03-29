@@ -1,26 +1,32 @@
 import AnyProxy from 'anyproxy'
-import bus from '../bus'
 import rule from './rule'
+import CONFIG from '../config/index'
 
-const options = {
-  port: 8001,
-  wsIntercept: true,
-  rule,
-  webInterface: {
-    enable: true,
-    webPort: 8002
-  },
-  silent: true
+function startProxy (ready) {
+  const options = {
+    port: CONFIG.port,
+    wsIntercept: true,
+    rule,
+    webInterface: {
+      enable: CONFIG.webInterface,
+      webPort: CONFIG.webPort
+    },
+    silent: true
+  }
+
+  const proxyServer = new AnyProxy.ProxyServer(options)
+
+  proxyServer.on('ready', () => {
+    console.log('ready')
+    if (ready) {
+      ready()
+    }
+  })
+
+  proxyServer.on('error', (e) => {
+  })
+
+  proxyServer.start()
 }
 
-const proxyServer = new AnyProxy.ProxyServer(options)
-
-proxyServer.on('ready', () => {
-  bus.$emit('proxy-ready')
-})
-
-proxyServer.on('error', (e) => { })
-
-// module.exports = proxyServer
-
-export default proxyServer
+export default startProxy

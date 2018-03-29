@@ -56,16 +56,15 @@
       'game.granbluefantasy.jp',
       'gbf.game.mbga.jp'
     ],
-    'transScenario': true,
-    'transPhrase': false,
     'port': 8001,
     'webInterface': true,
     'webPort': 8002,
-    'forceProxyHttps': true,
+    'forceProxyHttps': false,
     'wsIntercept': true,
     'frontAgent': false,
     'frontAgentHost': '127.0.0.1',
-    'frontAgentPort': 1080
+    'frontAgentPort': 8123,
+    'DEBUG': Boolean(process.env.debug)
   }
 
   export default {

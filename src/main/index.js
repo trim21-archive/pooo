@@ -2,11 +2,11 @@
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import CONFIG from '../config'
+import CONFIG from './config/index'
 
 import bus from './bus'
 
-import proxy from './proxy/index'
+import startProxy from './proxy/index'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
-let proxyStatus = 'stop'
+let proxyUp = false
 
 ipcMain.on('update-config', (event, data) => {
   Object.assign(CONFIG, data)
@@ -24,25 +24,14 @@ ipcMain.on('update-config', (event, data) => {
 })
 
 ipcMain.on('start-proxy', (event, data) => {
-  if (proxyStatus === 'stop') {
-    mainWindow.webContents.send('config-data', CONFIG)
-    if (!proxy.webServerInstance) {
-      proxy.start()
-    }
-    proxyStatus = 'starting'
-    event.returnValue = proxyStatus
-  } else {
-    event.returnValue = proxyStatus
+  if (!proxyUp) {
+    console.log('trying to start proxy server')
+    startProxy(() => {
+      console.log('proxy server is ready')
+      mainWindow.webContents.send('proxy-ready')
+      proxyUp = true
+    })
   }
-})
-
-ipcMain.on('stop-proxy', (event, data) => {
-  proxy.close()
-})
-
-bus.$on('proxy-ready', () => {
-  proxyStatus = 'started'
-  mainWindow.webContents.send('proxy-ready')
 })
 
 bus.$on('http', data => {
@@ -83,23 +72,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */

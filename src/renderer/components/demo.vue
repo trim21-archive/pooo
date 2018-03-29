@@ -78,7 +78,6 @@ export default {
             vm.messages = [{text: 'new battle'}]
             vm.battleID = data.content.id
           }
-          vm.messages.push({text: data.content.id})
         }
         if (data.type === 'join-battle') {
           let content = JSON.parse(data.content)
@@ -86,7 +85,6 @@ export default {
           if (content.boss.param.length === 1) {
             vm.bossName = content.boss.param[0].name.en
             vm.battleData.bossData = content.boss.param[0]
-            vm.messages.push({text: `join battle: ${vm.bossName}`})
           } else {
             vm.messages = [{text: '多头怪暂不支持'}]
           }

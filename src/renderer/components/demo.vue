@@ -56,6 +56,12 @@ export default {
               let latestDamageOfLastAttack = attack[attack.length - 1]
               bossHpAfterAttack = latestDamageOfLastAttack.hp
             }
+            if (action.cmd === 'damage') {
+              if (action.to === 'boss') {
+                let chainBrust = action.list[action.list.length - 1]
+                bossHpAfterAttack = chainBrust.hp
+              }
+            }
             if (action.cmd === 'turn') {
               break
             }

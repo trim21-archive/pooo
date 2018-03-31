@@ -9,7 +9,8 @@
     </div>
     <div v-else>
       <el-row>
-        <code>目前只会显示超巴的特动</code>
+        <code>目前只会显示超巴的特动</code><el-switch  v-model="voiceNotice"  active-color="#13ce66"  inactive-color="#ff4949"></el-switch>
+
       </el-row>
 
       <el-row>
@@ -32,6 +33,8 @@
   import { ipcRenderer, shell } from 'electron'
   import renderBus from '../renderBus'
   import bossAction from '../../lib/bossAction'
+  const audio = new window.Audio('static/audio/oh-finally.ogg')
+
 export default {
     name: 'demo',
     data () {
@@ -41,6 +44,7 @@ export default {
         proxyStatus: renderBus.proxyStatus,
         battleID: '',
         bossName: '',
+        voiceNotice: true,
         messages: [{text: 'start'}],
         battleData: {
           bossData: {}
@@ -51,7 +55,11 @@ export default {
       const vm = this
       renderBus.$on('boss-update', (message) => {
         vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
+        let lastMsg = vm.me
         vm.me = bossAction['Lvl 200 Ultimate Bahamut'](vm.battleData.bossData)
+        if (lastMsg !== vm.me) {
+          vm.playMusic()
+        }
       })
 
       ipcRenderer.on('http', (e, data) => {
@@ -101,6 +109,11 @@ export default {
       })
     },
     methods: {
+      playMusic () {
+        if (this.voiceNotice) {
+          audio.play()
+        }
+      },
       ifNewBattle (battleID) {
         return battleID !== this.battleID
       },

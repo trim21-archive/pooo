@@ -16,21 +16,6 @@ function checkIfWebsocketConnect (msg) {
     msg.resHeader.hasOwnProperty('upgrade') && msg.resHeader.upgrade === 'websocket'
 }
 
-// function checkIfAttack (msg) {
-//   //  `http://game.granbluefantasy.jp/rest/raid/normal_attack_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
-//   return msg.path.startsWith('/rest/raid/normal_attack_result.json')
-// }
-//
-// function checkIfSkill (msg) {
-//   // `http://game.granbluefantasy.jp/rest/raid/ability_result.json?_=${timestamp}&t=${unknown}&uid=${user id}`
-//   return msg.path.startsWith('/rest/raid/ability_result.json')
-// }
-//
-// function checkJoinRaid (msg) {
-//   // `http://game.granbluefantasy.jp/rest/multiraid/start.json?_=${timestamp}&t=${unknown}&uid=${user id}`
-//   return msg.path.startsWith('/rest/multiraid/start.json')
-// }
-
 const options = {
   baseUrl: 'ws://localhost:8002/do-not-proxy',
   onOpen: function () {
@@ -42,7 +27,11 @@ const options = {
       message = message.substr(2)
       try {
         message = JSON.parse(message)
-        console.log('boss status update')
+        if (message[0] === 'raid' && message[1].hasOwnProperty('bossUpdate')) {
+          renderBus.$emit('boss-update', message)
+        } else {
+          console.log(message[0])
+        }
       } catch (e) {
         console.log(message)
       }

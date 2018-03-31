@@ -8,18 +8,21 @@
       <el-button @click="startProxy">开启代理</el-button>
     </div>
     <div v-else>
-      proxy running
-      <el-button @click="open('http://localhost:8002')">控制面板
-      </el-button>
+      <el-row>
+        <code>目前只会显示超巴的特动</code>
+      </el-row>
 
-      <el-button @click="stopProxy">关闭代理</el-button>
-      <code>{{bossName}}</code>
-      <code>{{battleID}}</code>
-      <ul class="list-group">
-        <li v-for="(message, index) in messages" :key="index" class="list-group-item">
-          {{ message.text }}
-        </li>
-      </ul>
+      <el-row>
+        <pre><code>特动: {{  me  }}</code></pre>
+      </el-row>
+
+      <el-row>
+        <ul class="list-group">
+          <li v-for="(message, index) in messages" :key="index" class="list-group-item">
+            {{ message.text }}
+          </li>
+        </ul>
+      </el-row>
 
     </div>
   </div>
@@ -28,11 +31,12 @@
 <script>
   import { ipcRenderer, shell } from 'electron'
   import renderBus from '../renderBus'
-
+  import bossAction from '../../lib/bossAction'
 export default {
     name: 'demo',
     data () {
       return {
+        me: 'pooo',
         onceStarted: false,
         proxyStatus: renderBus.proxyStatus,
         battleID: '',
@@ -45,6 +49,11 @@ export default {
     },
     mounted () {
       const vm = this
+      renderBus.$on('boss-update', (message) => {
+        vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
+        vm.me = bossAction['Lvl 200 Ultimate Bahamut'](vm.battleData.bossData)
+      })
+
       ipcRenderer.on('http', (e, data) => {
         if (data.type === 'attack') {
           let content = JSON.parse(data.content)
@@ -66,7 +75,7 @@ export default {
               break
             }
           }
-          vm.messages.push({text: `攻击打到了(不算1爷反击) ${bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
+          vm.messages.unshift({text: `攻击后血量 ${bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
         }
 
         if (data.type === 'skill') {
@@ -97,6 +106,7 @@ export default {
       },
       startProxy () {
         this.$store.dispatch('startAnyProxy')
+        renderBus.$emit('start-wsc')
       },
       stopProxy () {
         this.started = false

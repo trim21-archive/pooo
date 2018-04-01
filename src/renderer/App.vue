@@ -9,7 +9,9 @@
       </el-menu>
     </el-row>
     <el-row>
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </el-row>
   </div>
 </template>

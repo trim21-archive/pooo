@@ -70,7 +70,6 @@
         }
         // saveConfig(this.configForm)
         ipcRenderer.send('update-config', this.configForm)
-        this.$electron.shell.openExternal('http://game.granbluefantasy.jp/')
         this.$router.push('/demo')
       }
     }

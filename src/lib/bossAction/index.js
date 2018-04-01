@@ -27,7 +27,6 @@ function lastKey (arr, per) {
 export default {
   'Lvl 200 Ultimate Bahamut' (bossData) {
     let percent = bossData.hp / bossData.hpmax
-    console.log([bossData.hp, bossData.hpmax, percent])
 
     let atks = {
       1.0: '',
@@ -70,7 +69,6 @@ export default {
     const lKey = lastKey(specialActions, percent)
     const aKey = nextKey(atks, percent)
     const npKey = nextKey(nps, percent)
-    console.log([nKey, lKey, aKey, npKey])
 
     return {
       special: {

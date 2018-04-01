@@ -16,8 +16,8 @@ function parseSkillDamage (o) {
     for (let key of o.scenario) {
       damage = 0
       if (key.cmd === 'loop_damage') {
-        for (let tmp of key.list) {
-          if (tmp.to === 'boss') {
+        if (key.to === 'boss') {
+          for (let tmp of key.list) {
             for (let t of tmp) {
               damage += parseInt(t.value)
             }

@@ -9,7 +9,8 @@
     </div>
     <div v-else>
       <el-row>
-        <code>目前只会显示超巴的特动</code><el-switch  v-model="voiceNotice"  active-color="#13ce66"  inactive-color="#ff4949"></el-switch>
+        <code>目前只会显示超巴的特动</code>
+        <el-switch v-model="voiceNotice" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
 
       </el-row>
 

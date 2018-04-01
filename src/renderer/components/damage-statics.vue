@@ -6,6 +6,7 @@
     </div>
     <div v-else>
       proxy running
+      <p>在开启代理服务器后无法切换到伤害统计</p>
       <p>暂时不会区分同一站位的不同角色,不同战斗同一位置造成的伤害会累积</p>
       <el-button icon="el-icon-document" size="small" @click="clearStatics">清空</el-button>
       <el-table :data="statics" border style="width: 100%">

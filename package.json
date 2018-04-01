@@ -30,9 +30,6 @@
     "portable": {
       "artifactName": "${productName}${version}.${ext}"
     },
-    "mac": {
-      "icon": "static/icons/icon.icns"
-    },
     "win": {
       "target": [
         {

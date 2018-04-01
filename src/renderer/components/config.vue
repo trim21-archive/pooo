@@ -15,7 +15,7 @@
                 </el-switch>
             </el-form-item>
             <el-form-item label="监控页端口">
-                <el-input-number v-model="configForm.webPort" :min="0" :max="65535"></el-input-number>
+                <el-input-number v-model="configForm.webPort" :disabled='true' :min="0" :max="65535"></el-input-number>
             </el-form-item>
             <el-form-item label="前置代理">
                 <el-switch v-model="configForm.frontAgent" active-text="开" inactive-text="关">
@@ -70,7 +70,6 @@
         }
         // saveConfig(this.configForm)
         ipcRenderer.send('update-config', this.configForm)
-        this.$electron.shell.openExternal('http://game.granbluefantasy.jp/')
         this.$router.push('/demo')
       }
     }

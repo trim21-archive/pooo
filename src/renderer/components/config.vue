@@ -14,6 +14,10 @@
                 <el-switch v-model="configForm.forceProxyHttps" active-text="开" inactive-text="关">
                 </el-switch>
             </el-form-item>
+            <el-form-item label="DEBUG mode">
+                <el-switch v-model="configForm.DEBUG" active-text="开" inactive-text="关">
+                </el-switch>
+            </el-form-item>
             <el-form-item label="监控页端口">
                 <el-input-number v-model="configForm.webPort" :disabled='true' :min="0" :max="65535"></el-input-number>
             </el-form-item>

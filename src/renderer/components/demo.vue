@@ -11,7 +11,6 @@
       <el-row>
         <code>目前只会显示超巴的特动</code>
         <el-switch v-model="voiceNotice" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-
       </el-row>
 
       <el-row>
@@ -46,6 +45,7 @@
   import { ipcRenderer, shell } from 'electron'
   import renderBus from '../renderBus'
   import bossAction from '../../lib/bossAction'
+
   const audio = new window.Audio('static/audio/oh-finally.ogg')
 
 export default {
@@ -70,7 +70,7 @@ export default {
       renderBus.$on('boss-update', (message) => {
         vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
         let lastMsg = vm.lastAction
-        let { special, atk, np } = bossAction['Lvl 200 Ultimate Bahamut'](vm.battleData.bossData)
+        let {special, atk, np} = bossAction['Lvl 200 Ultimate Bahamut'].hp(vm.battleData.bossData)
         vm.lastAction = special.last
         vm.nextAction = special.next
         vm.atk = atk
@@ -102,6 +102,11 @@ export default {
             }
           }
           vm.messages.unshift({text: `攻击后血量 ${bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
+          let atkDanger = bossAction['Lvl 200 Ultimate Bahamut'].atk(content)
+          if (atkDanger) {
+            vm.messages.unshift({text: atkDanger})
+            this.playMusic()
+          }
         }
 
         if (data.type === 'skill') {

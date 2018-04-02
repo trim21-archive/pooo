@@ -30,7 +30,7 @@ const options = {
         if (message[0] === 'raid' && message[1].hasOwnProperty('bossUpdate')) {
           renderBus.$emit('boss-update', message)
         } else {
-          console.log(message[0])
+          // console.log(message[0])
         }
       } catch (e) {
         console.log(message)

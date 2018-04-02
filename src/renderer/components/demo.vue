@@ -15,8 +15,20 @@
       </el-row>
 
       <el-row>
-        <pre><code>特动: {{  me  }}</code></pre>
+        <pre><code>上一个特动: {{ lastAction }}</code></pre>
       </el-row>
+       <el-row>
+        <pre><code>下一个特动: {{ nextAction }}</code></pre>
+      </el-row>
+
+     <el-row>
+        <pre><code>普攻: {{ atk }}</code></pre>
+      </el-row>
+     <el-row>
+        <pre><code>满豆: {{ np }}</code></pre>
+      </el-row>
+
+
 
       <el-row>
         <ul class="list-group">
@@ -40,9 +52,10 @@ export default {
     name: 'demo',
     data () {
       return {
-        me: 'pooo',
-        onceStarted: false,
-        proxyStatus: renderBus.proxyStatus,
+        lastAction: 'pooo',
+        nextAction: '',
+        atk: '',
+        np: '',
         battleID: '',
         bossName: '',
         voiceNotice: true,
@@ -56,9 +69,13 @@ export default {
       const vm = this
       renderBus.$on('boss-update', (message) => {
         vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
-        let lastMsg = vm.me
-        vm.me = bossAction['Lvl 200 Ultimate Bahamut'](vm.battleData.bossData)
-        if (lastMsg !== vm.me) {
+        let lastMsg = vm.lastAction
+        let { special, atk, np } = bossAction['Lvl 200 Ultimate Bahamut'](vm.battleData.bossData)
+        vm.lastAction = special.last
+        vm.nextAction = special.next
+        vm.atk = atk
+        vm.np = np
+        if (lastMsg !== vm.lastAction) {
           vm.playMusic()
         }
       })

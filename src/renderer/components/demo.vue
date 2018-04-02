@@ -101,7 +101,7 @@ export default {
               break
             }
           }
-          vm.messages.unshift({text: `攻击后血量 ${bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
+          vm.messages.unshift({text: `攻击后血量 ${100.0 * bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
           let atkDanger = bossAction['Lvl 200 Ultimate Bahamut'].atk(content)
           if (atkDanger) {
             vm.messages.unshift({text: atkDanger})

@@ -1,9 +1,10 @@
 'use strict'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
-
+import { autoUpdater } from 'electron-updater'
 import CONFIG from './config/index'
 
+import log from 'electron-log'
 import bus from './bus'
 
 import startProxy from './proxy/index'
@@ -71,4 +72,27 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let logMessage = 'Download speed: ' + progressObj.bytesPerSecond
+  logMessage = logMessage + ' - Downloaded ' + progressObj.percent + '%'
+  logMessage = logMessage + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+  console.log(logMessage)
+})
+
+autoUpdater.checkForUpdatesAndNotify()
+const sendStatusToWindow = console.log
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...')
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.')
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.')
 })

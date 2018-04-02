@@ -47,15 +47,14 @@
     },
     "publish": [
       {
-        "provider": "github",
-        "owner": "Trim21",
-        "repo": "pooo"
+        "provider": "github"
       }
     ]
   },
   "dependencies": {
     "anyproxy": "^4.0.6",
     "bootstrap": "^4.0.0",
+    "electron-log": "^2.2.14",
     "electron-updater": "^2.21.4",
     "element-ui": "^2.2.2",
     "eslint-plugin-vue": "^4.4.0",

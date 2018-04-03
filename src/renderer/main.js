@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
 Vue.use(element)
+Vue.config.silent = true
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,9 +1,9 @@
 'use strict'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { autoUpdater } from 'electron-updater'
+import request from 'request'
+import semver from 'semver'
 import CONFIG from './config/index'
-
 import log from 'electron-log'
 import bus from './bus'
 
@@ -74,25 +74,25 @@ app.on('activate', () => {
   }
 })
 
-autoUpdater.logger = log
-autoUpdater.logger.transports.file.level = 'info'
 log.info('App starting...')
 
-autoUpdater.on('download-progress', (progressObj) => {
-  let logMessage = 'Download speed: ' + progressObj.bytesPerSecond
-  logMessage = logMessage + ' - Downloaded ' + progressObj.percent + '%'
-  logMessage = logMessage + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-  console.log(logMessage)
-})
-
-autoUpdater.checkForUpdatesAndNotify()
-const sendStatusToWindow = console.log
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...')
-})
-autoUpdater.on('update-available', (info) => {
-  sendStatusToWindow('Update available.')
-})
-autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.')
+ipcMain.on('check-update', () => {
+  if (process.env.NODE_ENV !== 'development') {
+    log.info('check for update')
+    let localVersion = app.getVersion()
+    let headers = {'User-Agent': `Pooo ${localVersion}`}
+    request.get('http://api.github.com/repos/trim21/pooo/releases/latest', {headers}, (err, res, body) => {
+      if (err) {
+        log.error(err)
+      } else {
+        let release = JSON.parse(body)
+        let latestVersion = semver.clean(release.tag_name)
+        if (semver.lt(localVersion, latestVersion)) {
+          mainWindow.webContents.send('update-available', release)
+        } else {
+          mainWindow.webContents.send('update-not-available')
+        }
+      }
+    })
+  }
 })

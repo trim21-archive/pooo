@@ -26,7 +26,7 @@ export default {
     })
 
     ipcRenderer.on('update-not-available', (e, data) => {
-      this.$alert('没有更新')
+      this.$message('没有更新')
     })
     this.checkUpdate()
   },

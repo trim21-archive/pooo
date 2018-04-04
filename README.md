@@ -49,3 +49,5 @@ render进程中的`ipcRenderer`,main进程中的`ipcMain`,用于main进程与ren
 render进程中的`src/renderer/renderBus.js`,目前有两个事件:`boss-update`和`start-wsc`.`boss-update`用于在boss状态更新时进行广播,`start-wsc`用于在代理服务器成功启动之后通知websocket客户端连接到anyproxy提供的控制面板.
 
 main进程中的`src/main/bus.js`,目前只负责在代理`src/main/proxy/rule.js`与`src/main/index.js`中进行通信.`bus`只绑定了一个事件`http`,在`rule.js`中进行广播,`main.js`中进行接收,然后通过`mainWindow.webContents`广播到前端.
+
+关于 vue组件: 不要在`methods`中给`data`中的对象绑定新的key,如果需要新的key请在`component.data`中预先注明并添加默认值.

@@ -61,7 +61,10 @@ export default {
         voiceNotice: true,
         messages: [{text: 'start'}],
         battleData: {
-          bossData: {}
+          bossData: {
+            hp: 0,
+            hpmax: 0
+          }
         }
       }
     },

@@ -87,6 +87,7 @@ ipcMain.on('check-update', () => {
       } else {
         let release = JSON.parse(body)
         let latestVersion = semver.clean(release.tag_name)
+        log.info(localVersion, latestVersion)
         if (semver.lt(localVersion, latestVersion)) {
           mainWindow.webContents.send('update-available', release)
         } else {

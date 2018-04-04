@@ -1,6 +1,13 @@
-const config = {
+import { app } from 'electron'
+import fs from 'fs'
+import path from 'path'
+
+let config = {
   // 游戏的主要数据接口
-  apiHostNames: ['game.granbluefantasy.jp', 'gbf.game.mbga.jp'],
+  apiHostNames: [
+    'game.granbluefantasy.jp',
+    'gbf.game.mbga.jp'
+  ],
 
   // 本地代理的端口
   port: 8001,
@@ -14,6 +21,10 @@ const config = {
   frontAgent: false,
   frontAgentHost: '127.0.0.1',
   frontAgentPort: 8123
+}
+const configPath = path.resolve(app.getPath('userData'), 'config.json')
+if (fs.existsSync(configPath)) {
+  config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 }
 
 export default config

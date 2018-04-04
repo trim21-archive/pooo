@@ -7,8 +7,10 @@
 
 ## Build Setup
 
+如果你想自己手动构建,请先安装[nodejs](https://nodejs.org/zh-cn/)
+
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
 # serve with hot reload at localhost:9080
@@ -17,7 +19,6 @@ npm run dev
 # build electron application for production
 npm run build
 
-
 # lint all JS/Vue component files in `src/`
 npm run lint
 
@@ -25,13 +26,26 @@ npm run lint
 
 ## 使用
 
-在设置选项卡中设置好对应端口,然后代理gbf的数据
+在浏览器插件中代理以下两个域名
 
-前端的demo页面中可以看到攻击和施放技能的相应时间 (需要先打开pooo再进入战斗,才能获取到boss信息)
+```
+*.granbluefantasy.jp
+203.104.248.5
+```
 
-刷新帮助目前只能正确处理单头怪,不支持多头怪的处理(毕竟超巴也没多头)
+进入战斗后,浏览器会与此ip地址进行socket.io的通信,不加入代理无法根据血量提醒特动.
 
-多人战中的boss数据更新是通过一个socket.io链接进行的 目前链接的地址是
-`ws://203.104.248.5:11230/socket.io/`
-一般情况下是保持在ws链接,当ws连接不可用的时候会降级成长轮询
- 需要加入代理才能自动提醒特动
+## 贡献
+
+使用[standardjs](https://standardjs.com/)进行lint
+
+
+boss的数据在[src/lib/bossAction/boss](https://github.com/Trim21/pooo/tree/master/src/lib/bossAction/boss)中,以`start.json`中的`boss.param[0].name.en`来命名.
+
+### EventEmitter: 
+
+render进程中的`ipcRenderer`,main进程中的`ipcMain`,用于main进程与render进程的通信,目前只用于保存config和启动启动代理服务器.
+
+render进程中的`src/renderer/renderBus.js`,目前有两个事件:`boss-update`和`start-wsc`.`boss-update`用于在boss状态更新时进行广播,`start-wsc`用于在代理服务器成功启动之后通知websocket客户端连接到anyproxy提供的控制面板.
+
+main进程中的`src/main/bus.js`,目前只负责在代理`src/main/proxy/rule.js`与`src/main/index.js`中进行通信.`bus`只绑定了一个事件`http`,在`rule.js`中进行广播,`main.js`中进行接收,然后通过`mainWindow.webContents`广播到前端.

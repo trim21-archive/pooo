@@ -70,7 +70,7 @@ export default {
       renderBus.$on('boss-update', (message) => {
         vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
         let lastMsg = vm.lastAction
-        let {special, atk, np} = bossAction['Lvl 200 Ultimate Bahamut'].hp(vm.battleData.bossData)
+        let {special, atk, np} = bossAction(vm.bossName).hp(vm.battleData.bossData)
         vm.lastAction = special.last
         vm.nextAction = special.next
         vm.atk = atk
@@ -102,7 +102,7 @@ export default {
             }
           }
           vm.messages.unshift({text: `攻击后血量 ${100.0 * bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
-          let atkDanger = bossAction['Lvl 200 Ultimate Bahamut'].atk(content)
+          let atkDanger = bossAction(vm.bossName).dangerAtk(content)
           if (atkDanger) {
             vm.messages.unshift({text: atkDanger})
             this.playMusic()

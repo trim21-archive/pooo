@@ -24,48 +24,31 @@ function lastKey (arr, per) {
   return min
 }
 
-export default {
-  'Lvl 200 Ultimate Bahamut': {
+const files = require.context('./boss', false, /\.js$/)
+const modules = {}
+
+files.keys().forEach(key => {
+  if (key === './index.js') return
+
+  modules[key.replace(/(\.\/|\.js)/g, '')] = files(key).default
+})
+
+export default (battleName) => {
+  return {
     hp (bossData) {
       let percent = bossData.hp / bossData.hpmax
-
-      let atks = {
-        1.0: '',
-        0.75: '单体攻击 可能会上标记 有标记时下一回合五彩大炮',
-        0.50: '喷火AOE',
-        0.3: '不普攻',
-        0.10: '单体攻击',
-        0: 'aoe'
+      // no battle data
+      if (!modules.hasOwnProperty(battleName)) {
+        return {
+          special: {
+            next: '不支持',
+            last: '不支持'
+          },
+          atk: '不支持',
+          np: '不支持'
+        }
       }
-      let nps = {
-        1.0: '',
-        0.85: '奥义不明',
-        0.75: '百分比白字吹风\n喷火 全体多段伤害 最后大伤害 附带灼热 降奥义',
-        0.5: '神光 光1w AOE',
-        0.3: 'DPT检查阶段 满豆超越',
-        0.1: '非OD:水AOE+驱散\n   土AOE+我方降连+超巴三连buff\nOD:大破',
-        0: '不清楚'
-      }
-      let specialActions = {
-        0.01: '1% 五彩大炮',
-        0.05: '5% 暗aoe 1w5',
-        0.15: '15% 大破',
-        0.22: '22%特动 水AOE 驱动',
-        0.28: '28 触发满豆',
-        0.3: '30 驱散',
-        0.35: '35特动 四属陨石',
-        0.4: '40特动 白字陨石',
-        0.45: '45特动 四属陨石',
-        0.5: '50特动 白字陨石',
-        0.55: '55特动 喷火 最后大伤害 附带石化',
-        0.7: '70特动 神光 附加印记',
-        0.75: '75特动 5w土伤害',
-        0.8: '80 触发满豆',
-        0.85: '85 喷火 全体多段伤害 最终大伤害 灼热 降奥义DB',
-        0.95: '95 1w风伤 高昂',
-        1.0: ''
-      }
-
+      const { atks, specialActions, nps } = modules[battleName]
       const nKey = nextKey(specialActions, percent)
       const lKey = lastKey(specialActions, percent)
       const aKey = nextKey(atks, percent)
@@ -80,17 +63,9 @@ export default {
         np: nps[npKey]
       }
     },
-    atk (atk) {
-      for (let cmd of atk.scenario) {
-        if (cmd.cmd === 'condition' && cmd.to === 'player') {
-          if (cmd.condition.debuff) {
-            for (let db of cmd.condition.debuff) {
-              if (db.status === '4002') {
-                return '被标记了,快求净化,下一回合五彩大炮了'
-              }
-            }
-          }
-        }
+    dangerAtk (atk) {
+      if (modules.hasOwnProperty(battleName)) {
+        return modules[battleName].dangerAtk(atk)
       }
     }
   }

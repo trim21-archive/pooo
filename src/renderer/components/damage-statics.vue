@@ -18,6 +18,11 @@
             {{ scope.row.skill+scope.row.ca+scope.row.na }}
           </template>
         </el-table-column>
+        <el-table-column label="平均每T上海伤害" width="90">
+          <template slot-scope="scope">
+            {{format( (scope.row.skill+scope.row.ca+scope.row.na)/t )}}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -40,7 +45,8 @@
       return {
         onceStarted: false,
         started: this.$store.state.Proxy.running,
-        statics: [p(), p(), p(), p()]
+        statics: [p(), p(), p(), p()],
+        t: 0
       }
     },
     mounted () {
@@ -48,6 +54,7 @@
       ipcRenderer.on('http', (e, data) => {
         try {
           if (data.type === 'attack') {
+            vm.t += 1
             let content = JSON.parse(data.content)
             vm.addDeltaAttack(damageStatics.parseAttackDamage(content))
           }
@@ -62,7 +69,11 @@
       })
     },
     methods: {
+      format (num) {
+        return Math.round(num)
+      },
       clearStatics () {
+        this.t = 0
         for (let e of this.statics) {
           e.ca = 0
           e.skill = 0

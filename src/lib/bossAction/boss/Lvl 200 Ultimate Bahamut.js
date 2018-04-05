@@ -1,4 +1,5 @@
 export default {
+  // 攻击模式
   'atks': {
     '1.0': '',
     '0.75': '单体攻击 可能会上标记 有标记时下一回合五彩大炮',
@@ -7,6 +8,7 @@ export default {
     '0.1': '单体攻击',
     '0': 'aoe'
   },
+  // 奥义
   'nps': {
     '1.0': '',
     '0.85': '奥义不明',
@@ -16,6 +18,7 @@ export default {
     '0.1': '非OD:水AOE+驱散\n   土AOE+我方降连+超巴三连buff\nOD:大破',
     '0': '不清楚'
   },
+  // 特动
   'specialActions': {
     '0.01': '1% 五彩大炮',
     '0.05': '5% 暗aoe 1w5',
@@ -35,6 +38,7 @@ export default {
     '0.95': '95 1w风伤 高昂',
     '1.0': ''
   },
+  // 危险攻击,如即死等
   dangerAtk (atk) {
     for (let cmd of atk.scenario) {
       if (cmd.cmd === 'condition' && cmd.to === 'player') {

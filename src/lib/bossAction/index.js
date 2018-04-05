@@ -64,7 +64,8 @@ export default (battleName) => {
       }
     },
     dangerAtk (atk) {
-      if (modules.hasOwnProperty(battleName)) {
+      if (modules.hasOwnProperty(battleName) &&
+        modules.battleName.hasOwnProperty('dangerAtk')) {
         return modules[battleName].dangerAtk(atk)
       }
     }

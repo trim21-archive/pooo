@@ -39,9 +39,12 @@ function parseAttackDamage (o) {
   for (let key of o.scenario) {
     if (key.cmd === 'attack') {
       let damage = 0
-      for (let tmp of key.damage) {
-        for (let t of tmp) {
-          damage += parseInt(t.value)
+      console.log(key.damage)
+      for (let tmp in key.damage) {
+        if (key.damage.hasOwnProperty(tmp)) {
+          for (let t of key.damage[tmp]) {
+            damage += parseInt(t.value)
+          }
         }
       }
       result.push({

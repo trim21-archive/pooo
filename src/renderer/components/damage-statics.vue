@@ -18,7 +18,7 @@
             {{ scope.row.skill+scope.row.ca+scope.row.na }}
           </template>
         </el-table-column>
-        <el-table-column label="平均每T上海伤害" width="90">
+        <el-table-column label="平均每T伤害" width="90">
           <template slot-scope="scope">
             {{format( (scope.row.skill+scope.row.ca+scope.row.na)/t )}}
           </template>
@@ -64,6 +64,7 @@
         }
         if (data.type === 'skill') {
           let content = JSON.parse(data.content)
+          vm.addDeltaAttack(damageStatics.parseAttackDamage(content))
           vm.addDeltaSkill(damageStatics.parseSkillDamage(content))
         }
       })

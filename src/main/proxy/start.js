@@ -1,3 +1,3 @@
-const runServer = require('./index')
+import runServer from './index'
 
 runServer()

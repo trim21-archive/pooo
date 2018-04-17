@@ -1,21 +1,27 @@
-os:
-  - osx
+os: osx
 
 language: node_js
 
-if: tag IS present
+# if: tag IS present
 
 cache:
-  - yarn
-  - $HOME/.electron
-  - $HOME/.yarn
-  - $HOME/Library/Caches/electron-builder
+  directories:
+    - $HOME/.electron
+    - $HOME/.npm
+    - $HOME/Library/Caches/electron-builder
 
 node_js:
-  - '8.11'
+    - '8.11'
 
-env:
-    - TRAVIS_CI=TRAVIS_CI
+before_install:
+    - export PATH=`echo $PATH | sed 's/:.\/node_modules\/.bin//g'`
+    - echo $PATH
+    - npm i -g npm@latest
+
+
+install:
+    - echo $PATH
+    - npm ci
 
 script:
-    - npm run release
+    - npm run publish

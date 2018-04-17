@@ -11,7 +11,7 @@
 
 ``` bash
 # 安装依赖
-npm install
+npm ci
 
 # serve with hot reload at localhost:9080
 npm run dev

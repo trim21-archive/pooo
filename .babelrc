@@ -1,4 +1,7 @@
 {
+  "presets": [
+    "es2015"
+  ],
   "comments": false,
   "env": {
     "main": {
@@ -19,7 +22,7 @@
         [
           "env",
           {
-//            "modules": false
+            //            "modules": false
           }
         ],
         "stage-0"
@@ -30,7 +33,7 @@
         [
           "env",
           {
-//            "modules": false
+            //            "modules": false
           }
         ],
         "stage-0"

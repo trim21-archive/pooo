@@ -13,11 +13,11 @@ cache:
 node_js:
     - '8.11'
 
-before_install:
-    - export PATH=`echo $PATH | sed 's/:.\/node_modules\/.bin//g'`
+before_install: 
+    # remove ./node_modules/.bin from $PATH, important
+    - export PATH=`echo $PATH | sed 's/:.\/node_modules\/.bin//g'` 
     - echo $PATH
     - npm i -g npm@latest
-
 
 install:
     - echo $PATH

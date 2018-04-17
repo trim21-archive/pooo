@@ -10,24 +10,42 @@
     <div v-else>
       <el-row>
         <code>目前只会显示超巴的特动</code>
-        <el-switch v-model="voiceNotice" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+      </el-row>
+      <el-row>
+        <el-button type="text" @click="dialogVisible = true">提示音设置</el-button>
+
+        <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+          <p>致命DB提示音</p>
+          <el-select v-model="audioIndesOfDangerAtk" placeholder="致命DB提示音" @change="playMusic(audioIndesOfDangerAtk)">
+            <el-option v-for="(item, index)  in audios" :key="index" :label="item.name" :value="index">
+            </el-option>
+          </el-select>
+          <br>
+          <p>特动提示音</p>
+          <el-select v-model="audioIndesOfSpecialAction" placeholder="特动提示音" @change="playMusic(audioIndesOfSpecialAction)">
+            <el-option v-for="(item, index) in audios" :key="index" :label="item.name" :value="index">
+            </el-option>
+          </el-select>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
       </el-row>
 
       <el-row>
         <pre><code>上一个特动: {{ lastAction }}</code></pre>
       </el-row>
-       <el-row>
+      <el-row>
         <pre><code>下一个特动: {{ nextAction }}</code></pre>
       </el-row>
 
-     <el-row>
+      <el-row>
         <pre><code>普攻: {{ atk }}</code></pre>
       </el-row>
-     <el-row>
+      <el-row>
         <pre><code>满豆: {{ np }}</code></pre>
       </el-row>
-
-
 
       <el-row>
         <ul class="list-group">
@@ -45,13 +63,30 @@
   import { ipcRenderer, shell } from 'electron'
   import renderBus from '../renderBus'
   import bossAction from '../../lib/bossAction'
-
-  const audio = new window.Audio('static/audio/oh-finally.ogg')
-
+  const audios = [
+    {
+      name: 'oh-finally.ogg',
+      obj: new window.Audio('static/audio/oh-finally.ogg')
+    }, {
+      name: 'oringz-w425.ogg',
+      obj: new window.Audio('static/audio/oringz-w425.ogg')
+    }, {
+      name: 'pedantic.ogg',
+      obj: new window.Audio('static/audio/pedantic.ogg')
+    }, {
+      name: 'system.ogg',
+      obj: new window.Audio('static/audio/system.ogg')
+    }
+  ]
+const localStorage = window.localStorage
 export default {
     name: 'demo',
     data () {
       return {
+        dialogVisible: false,
+        audios,
+        audioIndesOfDangerAtk: 0,
+        audioIndesOfSpecialAction: 0,
         lastAction: 'pooo',
         nextAction: '',
         atk: '',
@@ -68,18 +103,27 @@ export default {
         }
       }
     },
+    watch: {
+      audioIndesOfDangerAtk (newValue, oldValue) {
+        localStorage.setItem('audioIndesOfDangerAtk', newValue)
+      },
+      audioIndesOfSpecialAction (newValue, oldValue) {
+        localStorage.setItem('audioIndesOfSpecialAction', newValue)
+      }
+    },
     mounted () {
       const vm = this
       renderBus.$on('boss-update', (message) => {
         vm.battleData.bossData.hp = message[1].bossUpdate.param.boss1_hp
         let lastMsg = vm.lastAction
+        // let {special, atk, np} = bossAction('Lvl 200 Ultimate Bahamut').hp(vm.battleData.bossData)
         let {special, atk, np} = bossAction(vm.bossName).hp(vm.battleData.bossData)
         vm.lastAction = special.last
         vm.nextAction = special.next
         vm.atk = atk
         vm.np = np
         if (lastMsg !== vm.lastAction) {
-          vm.playMusic()
+          vm.playMusic(vm.audioIndesOfSpecialAction)
         }
       })
 
@@ -108,7 +152,7 @@ export default {
           let atkDanger = bossAction(vm.bossName).dangerAtk(content)
           if (atkDanger) {
             vm.messages.unshift({text: atkDanger})
-            this.playMusic()
+            this.playMusic(vm.audioIndesOfDangerAtk)
           }
         }
 
@@ -135,9 +179,9 @@ export default {
       })
     },
     methods: {
-      playMusic () {
+      playMusic (i) {
         if (this.voiceNotice) {
-          audio.play()
+          this.audios[i].obj.play()
         }
       },
       ifNewBattle (battleID) {

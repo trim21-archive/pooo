@@ -148,6 +148,7 @@ export default {
               break
             }
           }
+  
           vm.messages.unshift({text: `攻击后血量 ${100.0 * bossHpAfterAttack / vm.battleData.bossData.hpmax} %`})
           let atkDanger = bossAction(vm.bossName).dangerAtk(content)
           if (atkDanger) {

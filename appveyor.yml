@@ -28,6 +28,7 @@ install:
   - npm --version
 
 build_script:
-  - DEBUG=electron-builder npm run publish
+  - $env:DEBUG = "electron-builder"
+  - npm run publish
 
 test: off

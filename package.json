@@ -50,17 +50,18 @@
       "icon": "static/icons"
     },
     "mac": {
+      "publish": [
+        "github"
+      ],
       "icon": "static/icons",
       "category": "public.app-category.games",
       "target": "zip"
     },
-    "publish": [
-      {
+    "publish": {
         "provider": "github",
         "owner": "Trim21",
-        "project": "pooo"
+        "repo": "pooo"
       }
-    ]
   },
   "dependencies": {
     "anyproxy": "^4.0.6",

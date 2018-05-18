@@ -1,8 +1,6 @@
 import CONFIG from '../config/index.js'
 import bus from '../bus'
 import URI from 'urijs'
-import fs from 'fs'
-import path from 'path'
 
 const apiHostNames = CONFIG.apiHostNames
 
@@ -25,38 +23,19 @@ module.exports = {
       const urlPath = uri.path()
 
       if (urlPath === '/rest/raid/normal_attack_result.json' || urlPath === '/rest/multiraid/normal_attack_result.json') {
-        content = JSON.stringify(JSON.parse(content), null, 4)
-        if (CONFIG.DEBUG) {
-          console.log('attack')
-          fs.writeFile(path.join(__dirname, `../../../log/attack/${new Date().getTime()}.json`), content, err => {
-            console.error(err)
-          })
-        }
         type = 'attack'
       }
       if (urlPath === '/rest/raid/ability_result.json' || urlPath === '/rest/multiraid/ability_result.json') {
-        content = JSON.stringify(JSON.parse(content), null, 4)
         type = 'skill'
-        if (CONFIG.DEBUG) {
-          console.log('skill')
-          fs.writeFile(path.join(__dirname, `../../../log/skill/${new Date().getTime()}.json`), content, err => {
-            console.error(err)
-          })
-        }
       }
       if (urlPath === '/rest/multiraid/start.json' || urlPath === '/rest/raid/start.json') {
-        content = JSON.stringify(JSON.parse(content), null, 4)
         type = 'join-battle'
-        if (CONFIG.DEBUG) {
-          console.log('join-battle')
-          fs.writeFile(path.join(__dirname, `../../../log/start/${new Date().getTime()}.json`), content, err => {
-            console.error(err)
-          })
-        }
       }
-      if (urlPath.startsWith('/multiraid/content/index')) {
-        content = JSON.stringify(JSON.parse(content), null, 4)
+      if (urlPath === '/rest/multiraid/summon_result.json' || urlPath === '/rest/raid/summon_result.json') {
+        type = 'summon'
+      }
 
+      if (urlPath.startsWith('/multiraid/content/index')) {
         type = 'enter-multiraid'
         let s = urlPath.split('/')
         content = {

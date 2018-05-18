@@ -197,6 +197,9 @@ export default {
         ipcRenderer.send('stop-proxy')
       },
       open: shell.openExternal
+    },
+    beforeDestroy () {
+      renderBus.$off('boss-update')
     }
   }
 </script>

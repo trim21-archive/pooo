@@ -6,7 +6,8 @@ import semver from 'semver'
 import CONFIG from './config/index'
 import log from 'electron-log'
 import bus from './bus'
-
+import path from 'path'
+import utils from '../lib/utils'
 import startProxy from './proxy/index'
 /**
  * Set `__static` path to static files in production
@@ -18,6 +19,9 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 let proxyUp = false
+
+utils.ensureExists(app.getPath('userData'))
+utils.ensureExists(path.resolve(app.getPath('userData'), 'record'))
 
 ipcMain.on('update-config', (event, data) => {
   Object.assign(CONFIG, data)

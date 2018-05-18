@@ -36,6 +36,7 @@ function parseSkillDamage (o) {
 function parseAttackDamage (o) {
   let result = []
   let chargeAttackResult = []
+  let pos = 0
   for (let key of o.scenario) {
     if (key.cmd === 'attack') {
       let damage = 0
@@ -55,6 +56,7 @@ function parseAttackDamage (o) {
 
     if (key.cmd === 'special' || key.cmd === 'special_npc') {
       let damage = 0
+      pos = key.pos
       for (let tmp of key.list) {
         for (let t of tmp.damage) {
           damage += parseInt(t.value)
@@ -65,6 +67,21 @@ function parseAttackDamage (o) {
         damage
       })
     }
+    if (key.cmd === 'chain_cutin') {
+      continue
+    }
+    if (key.cmd === 'damage' && key.mode === 'parallel' && key.to === 'boss') {
+      for (let tmp in chargeAttackResult) {
+        if (chargeAttackResult.hasOwnProperty(tmp)) {
+          if (chargeAttackResult[tmp].pos === pos) {
+            for (let t of key.list) {
+              chargeAttackResult[tmp].damage += parseInt(t.value)
+            }
+            break
+          }
+        }
+      }
+    }
   }
   return {
     na: result,
@@ -72,7 +89,7 @@ function parseAttackDamage (o) {
   }
 }
 
-export default {
+exports = module.exports = {
   parseSkillDamage,
   parseAttackDamage
 }

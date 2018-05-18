@@ -56,7 +56,9 @@
     },
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "Trim21",
+        "project": "pooo"
       }
     ]
   },

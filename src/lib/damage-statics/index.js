@@ -68,7 +68,7 @@ function parseAttackDamage (o) {
       })
     }
     if (key.cmd === 'chain_cutin') {
-      continue
+      break
     }
     if (key.cmd === 'damage' && key.mode === 'parallel' && key.to === 'boss') {
       for (let tmp in chargeAttackResult) {

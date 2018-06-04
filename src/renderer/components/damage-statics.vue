@@ -94,8 +94,8 @@ const p = () => {
         }
         if (data.type === 'skill') {
           let content = JSON.parse(data.content)
-          vm.addDeltaAttack(damageStatics.parseAttackDamage(content))
-          // vm.addDeltaSkill(damageStatics.parseSkillDamage(content))
+          // vm.addDeltaAttack(damageStatics.parseAttackDamage(content))
+          vm.addDeltaSkill(damageStatics.parseSkillDamage(content))
         }
       })
     },

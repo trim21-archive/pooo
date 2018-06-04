@@ -42,7 +42,7 @@ module.exports = {
           id: s[s.length - 1]
         }
       }
-      if (type) bus.$emit('http', {type, content})
+      if (type) bus.$emit('http', { type, content })
     }
     return responseDetail
   }
